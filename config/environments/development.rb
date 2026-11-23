@@ -1,6 +1,9 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # Permite compartir la app local con un túnel de Cloudflare (bin/share → https://*.trycloudflare.com).
+  config.hosts << ".trycloudflare.com"
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Make code changes take effect immediately without server restart.

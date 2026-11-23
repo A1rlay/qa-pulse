@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Publica la app local con un túnel gratuito de Cloudflare (sin cuenta): imprime una URL https://….trycloudflare.com
+# Requiere: bin/rails server corriendo en el puerto 3000 y cloudflared instalado (sudo pacman -S cloudflared).
+# La URL cambia cada vez y deja de funcionar al cerrar este comando (Ctrl+C).
+set -euo pipefail
+command -v cloudflared >/dev/null || { echo "Falta cloudflared: sudo pacman -Syu cloudflared" >&2; exit 1; }
+curl -fsS -o /dev/null http://127.0.0.1:3000/up || { echo "Primero arranca la app: bin/rails server" >&2; exit 1; }
+echo "Abriendo túnel… busca la línea con https://….trycloudflare.com"
+exec cloudflared tunnel --url http://localhost:3000
