@@ -18,11 +18,26 @@ if (root) {
   let lastRunId = null
   let timer = null
   let inFlight = false
+  let rerun = false // se pidió refrescar (p. ej. cambio de rama) mientras había una petición en curso
 
   const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+  const branchSelect = document.getElementById("branch-filter")
+
+  // Agrega ?branch= a las URLs de la API cuando hay una rama elegida.
+  const withBranch = (url) => {
+    const u = new URL(url, window.location.origin)
+    if (branchSelect?.value) u.searchParams.set("branch", branchSelect.value)
+    return u.toString()
+  }
 
   // ---------- Ejecuciones: tarjetas, gráfica y tabla ----------
-  function updateCards(run) {
+  // Cambio respecto a la ejecución anterior. good = "subir es bueno" (true), "subir es malo" (false) o neutro (null).
+  const DELTAS = {
+    total: { good: null }, passed: { good: true }, failed: { good: false }, flaky: { good: false },
+    pass_rate: { good: true, unit: " pts" }, duration_ms: { good: false, format: formatDuration },
+  }
+
+  function updateCards(run, previous) {
     const values = {
       total: run.total, passed: run.passed, failed: run.failed, flaky: run.flaky,
       pass_rate: `${run.pass_rate}%`, duration_ms: formatDuration(run.duration_ms),
@@ -30,12 +45,29 @@ if (root) {
     for (const [key, value] of Object.entries(values)) {
       const node = root.querySelector(`[data-stat="${key}"]`)
       if (node) node.textContent = value
+      const deltaNode = root.querySelector(`[data-delta="${key}"]`)
+      if (!deltaNode) continue
+      deltaNode.classList.remove("is-good", "is-bad")
+      if (!previous) { deltaNode.textContent = ""; continue }
+      const diff = +(run[key] - previous[key]).toFixed(1)
+      const { good, unit = "", format } = DELTAS[key]
+      if (diff === 0) { deltaNode.textContent = "= que la anterior"; continue }
+      const amount = format ? format(Math.abs(diff)) : `${Math.abs(diff)}${unit}`
+      deltaNode.textContent = `${diff > 0 ? "▲" : "▼"} ${amount} vs anterior`
+      if (good !== null) deltaNode.classList.add((diff > 0) === good ? "is-good" : "is-bad")
     }
     const meta = $("[data-latest-meta]")
-    meta.replaceChildren(
+    const parts = [
       el("a", { text: `#${run.id}`, attrs: { href: runUrl(run.id) } }),
-      ` · ${formatDate(run.started_at)} · ${run.branch || "sin rama"}`
-    )
+      ` · ${formatDate(run.started_at)} · ${run.branch || "sin rama"}`,
+    ]
+    if (previous) {
+      const compare = new URL(root.dataset.compareUrl, window.location.origin)
+      compare.searchParams.set("base", previous.id)
+      compare.searchParams.set("head", run.id)
+      parts.push(" · ", el("a", { text: "¿qué cambió?", attrs: { href: compare.pathname + compare.search, "data-compare-link": "" } }))
+    }
+    meta.replaceChildren(...parts)
   }
 
   function updateTable(runs) {
@@ -112,10 +144,11 @@ if (root) {
   async function loadRuns() {
     const state = $("[data-chart-state]")
     try {
-      const { runs } = await getJSON(root.dataset.runsUrl)
+      const { runs } = await getJSON(withBranch(root.dataset.runsUrl))
       if (runs.length === 0) {
         $("[data-chart-box]").hidden = true
-        setState(state, "empty", "Todavía no hay ejecuciones. Sube un reporte con el comando de abajo y aparecerá aquí en menos de 10 segundos.")
+        $("[data-runs-body]").replaceChildren()
+        setState(state, "empty", branchSelect?.value ? `No hay ejecuciones en la rama «${branchSelect.value}».` : "Todavía no hay ejecuciones. Sube un reporte con el comando de abajo y aparecerá aquí en menos de 10 segundos.")
         return
       }
       setState(state, "ok")
@@ -123,7 +156,7 @@ if (root) {
       drawChart(runs)
       updateTable(runs)
       const latest = runs[runs.length - 1]
-      updateCards(latest)
+      updateCards(latest, runs[runs.length - 2])
       if (lastRunId !== null && latest.id !== lastRunId) announceNewRun(latest)
       lastRunId = latest.id
     } catch (error) {
@@ -146,7 +179,7 @@ if (root) {
     const state = $("[data-flaky-state]")
     const box = $("[data-flaky-box]")
     try {
-      const { tests } = await getJSON(root.dataset.flakyUrl)
+      const { tests } = await getJSON(withBranch(root.dataset.flakyUrl))
       if (tests.length === 0) {
         box.hidden = true
         setState(state, "empty", "Ninguna prueba es inestable en las últimas ejecuciones. 🎉")
@@ -182,8 +215,9 @@ if (root) {
 
   // ---------- Ciclo de refresco ----------
   async function refresh() {
-    if (inFlight) return
+    if (inFlight) { rerun = true; return }
     inFlight = true
+    rerun = false
     clearTimeout(timer)
     const results = await Promise.allSettled([loadRuns(), loadFlaky()])
     inFlight = false
@@ -196,6 +230,7 @@ if (root) {
     } else {
       setTimeout(() => { liveText.textContent = `En vivo · actualizado ${new Date().toLocaleTimeString("es-MX")}` }, 4000)
     }
+    if (rerun) return refresh()
     if (!document.hidden) timer = setTimeout(refresh, refreshMs)
   }
 
@@ -204,6 +239,19 @@ if (root) {
     if (document.hidden) clearTimeout(timer)
     else refresh()
   })
+
+  if (branchSelect) {
+    const initial = new URL(window.location).searchParams.get("rama")
+    if (initial && [...branchSelect.options].some((o) => o.value === initial)) branchSelect.value = initial
+    branchSelect.addEventListener("change", () => {
+      const url = new URL(window.location)
+      if (branchSelect.value) url.searchParams.set("rama", branchSelect.value)
+      else url.searchParams.delete("rama")
+      history.replaceState(null, "", url) // la rama elegida queda en la URL
+      lastRunId = null // cambiar de rama no es "una ejecución nueva"
+      refresh()
+    })
+  }
 
   refresh()
 }

@@ -17,7 +17,18 @@ class Project < ApplicationRecord
   end
 
   def latest_run = runs.order(started_at: :desc, id: :desc).first
-  def recent_runs(limit) = runs.order(started_at: :desc, id: :desc).limit(limit)
+
+  def recent_runs(limit, branch: nil)
+    scope = runs.order(started_at: :desc, id: :desc).limit(limit)
+    branch.present? ? scope.where(branch: branch) : scope
+  end
+
+  def branches = runs.where.not(branch: [ nil, "" ]).distinct.order(:branch).pluck(:branch)
+
+  # Genera un token nuevo; el anterior deja de funcionar de inmediato.
+  def rotate_api_token!
+    update!(api_token: SecureRandom.hex(32))
+  end
 
   private
 

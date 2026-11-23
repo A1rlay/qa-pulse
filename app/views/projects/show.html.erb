@@ -5,17 +5,29 @@
     <p class="crumbs"><%= link_to "Proyectos", projects_path %> /</p>
     <h1><%= @project.name %></h1>
   </div>
-  <p class="live" id="live-status" role="status" aria-live="polite">
-    <span class="live__dot" aria-hidden="true"></span>
-    <span data-live-text>Conectando…</span>
-  </p>
+  <div class="toolbar">
+    <% if @branches.size > 1 %>
+      <label class="select-label">Rama
+        <select id="branch-filter" class="select">
+          <option value="">Todas</option>
+          <% @branches.each do |branch| %><option value="<%= branch %>"><%= branch %></option><% end %>
+        </select>
+      </label>
+    <% end %>
+    <p class="live" id="live-status" role="status" aria-live="polite">
+      <span class="live__dot" aria-hidden="true"></span>
+      <span data-live-text>Conectando…</span>
+    </p>
+  </div>
 </div>
+<%= render "projects/nav", project: @project %>
 
 <div id="dashboard"
      data-runs-url="<%= api_v1_project_runs_path(@project.slug, format: :json, limit: 20) %>"
      data-flaky-url="<%= api_v1_project_flaky_path(@project.slug, format: :json) %>"
      data-run-url-template="<%= project_run_path(@project, "RUN_ID") %>"
-     data-refresh-ms="10000">
+     data-refresh-ms="10000"
+     data-compare-url="<%= compare_project_path(@project) %>">
 
   <section aria-labelledby="summary-title">
     <h2 id="summary-title" class="section-title">
@@ -41,6 +53,7 @@
                   end %>
             <% else %>—<% end %>
           </span>
+          <span class="stat__delta" data-delta="<%= key %>"></span>
         </div>
       <% end %>
     </div>
@@ -95,8 +108,27 @@
     </div>
   </section>
 
-  <details class="card">
+  <details class="card" id="subir">
     <summary><strong>Cómo subir un reporte a este proyecto</strong></summary>
     <%= render "shared/upload_instructions", project: @project %>
+    <div class="danger-zone">
+      <p><strong>¿Se filtró el token?</strong> Genera uno nuevo: el actual dejará de funcionar de inmediato.</p>
+      <%= button_to "Regenerar token", rotate_token_project_path(@project), method: :post,
+            class: "btn btn--danger btn--small", form: { data: { confirm: "¿Regenerar el token? Los scripts y pipelines que usen el actual dejarán de poder subir reportes." } } %>
+    </div>
+  </details>
+
+  <details class="card" id="ci">
+    <summary><strong>Integración continua e insignia</strong></summary>
+    <p>Agrega esta insignia al README de tu repositorio; muestra el % de éxito de la última ejecución:</p>
+    <p><%= image_tag badge_project_path(@project, format: :svg), alt: "Insignia de QA Pulse", class: "badge-preview" %></p>
+    <div class="copyable">
+      <pre><code id="badge-md">[![QA Pulse](<%= badge_project_url(@project, format: :svg) %>)](<%= project_url(@project) %>)</code></pre>
+      <button type="button" class="btn btn--small" data-copy-target="badge-md">Copiar</button>
+    </div>
+    <p>Para subir reportes automáticamente desde GitHub Actions, copia
+      <code>docs/ci/github-actions-playwright.yml</code> a <code>.github/workflows/</code> de tu repositorio y crea los
+      secretos <code>QA_PULSE_URL</code> (<code><%= request.base_url %></code>), <code>QA_PULSE_PROJECT</code>
+      (<code><%= @project.slug %></code>) y <code>QA_PULSE_TOKEN</code>.</p>
   </details>
 </div>

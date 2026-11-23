@@ -31,6 +31,7 @@
               <code class="muted"><%= project.slug %></code>
             </div>
             <% if run %>
+              <div class="project-card__trend"><%= pass_rate_sparkline(@trends.fetch(project.id, [])) %></div>
               <p class="project-card__stats">
                 Última ejecución: <%= l(run.started_at, format: :short) %> ·
                 <strong><%= run.pass_rate %>%</strong> aprobadas ·

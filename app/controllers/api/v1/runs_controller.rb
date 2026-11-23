@@ -11,9 +11,9 @@ module Api
       # GET /api/v1/projects/:slug/runs.json?limit=20 — orden cronológico (más antigua primero).
       def index
         limit = (Integer(params[:limit].to_s, 10, exception: false) || DEFAULT_LIMIT).clamp(1, 100)
-        runs = @project.recent_runs(limit).to_a.reverse
+        runs = @project.recent_runs(limit, branch: params[:branch].presence&.to_s).to_a.reverse
         render json: { project: { name: @project.name, slug: @project.slug },
-                       runs: runs.map(&:summary) }
+                       branch: params[:branch].presence, runs: runs.map(&:summary) }
       end
 
       # POST /api/v1/projects/:slug/runs  (Authorization: Bearer <api_token>)

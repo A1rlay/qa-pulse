@@ -51,3 +51,21 @@ Una prueba E2E de XSS por AJAX falla con un mutante que usa `innerHTML` (verific
 - La regla flaky se calcula en Ruby sobre las últimas 10 ejecuciones en cada petición (≈300 filas): sin caché. Revisar si una ejecución supera ~5k pruebas.
 - Probar en XAMPP/MariaDB y en Windows antes del martes (CHECK constraints, compilación de mysql2, scripts bash → Git Bash).
 **Next:** product — después de la presentación: ¿se necesita filtrar el tablero por rama?
+
+### product + backend + frontend — Mejoras (rama `mejoras`) — 2026-11-22
+**Did:** comparar ejecuciones (`RunComparison`), Insights (`ProjectInsights`: lentas, mapa de calor; `TestSearch`:
+búsqueda AJAX), filtro por rama (tablero, Insights, API), variación vs anterior en las tarjetas, mini gráficas
+(SVG del servidor) en Proyectos, insignia SVG, CSV, regenerar token, workflow de GitHub Actions. 110 specs + 9 E2E.
+**Decisions:**
+- Sin cuentas de usuario. Rechazado: login con has_secure_password. Costo: lecturas públicas (ver ADR 0001).
+  Motivo: tocaba todas las páginas a 2 días de la presentación y complicaba la demo.
+- Una prueba nueva que falla cuenta como "nueva falla" y no como "agregada". Rechazado: categorías disjuntas por
+  existencia. Costo: "Pruebas nuevas" solo lista las que no fallan.
+- "Más lenta" = ≥ 50 % **y** ≥ 200 ms. Rechazado: solo relativo (ruido en pruebas de 10 ms).
+- `allow_browser` solo para HTML: el proxy de imágenes de GitHub y curl no son navegadores modernos.
+**Break gate, probado:** el spec encontró que una prueba nueva y rota se clasificaba como "agregada" (se ocultaba
+una falla) → corregido. El paso de CI con `--get` + `--upload-file` sale con código 2 en curl → reescrito y
+ejecutado tal cual contra el servidor (rama con espacio y `&`). La mutación sin `sanitize_sql_like` hace fallar un spec.
+**Held up:** insignia con nombre `<script>` escapada; celda `=HYPERLINK(...)` neutralizada; regenerar token sin CSRF → 422;
+por GET → 404; ejecución de otro proyecto en Comparar → 404.
+**Named but not implemented:** Insights recalcula en cada petición (sin caché); aceptable con ≤ 100 ejecuciones × 30 pruebas.

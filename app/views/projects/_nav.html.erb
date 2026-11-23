@@ -1,0 +1,6 @@
+<nav class="tabs" aria-label="Secciones del proyecto">
+  <% [["Tablero", project_path(project), "show"], ["Insights", insights_project_path(project), "insights"],
+      ["Comparar", compare_project_path(project), "compare"]].each do |label, href, action| %>
+    <%= link_to label, href, class: "tabs__item", aria: { current: (action_name == action && controller_name == "projects") ? "page" : nil } %>
+  <% end %>
+</nav>

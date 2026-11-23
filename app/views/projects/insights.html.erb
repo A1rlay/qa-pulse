@@ -1,0 +1,74 @@
+<% content_for :title, "Insights · #{@project.name}" %>
+
+<div class="page-head page-head--row">
+  <div>
+    <p class="crumbs"><%= link_to "Proyectos", projects_path %> /</p>
+    <h1><%= @project.name %></h1>
+  </div>
+  <% if @branches.size > 1 %>
+    <div class="toolbar">
+      <label class="select-label">Rama
+        <select id="insights-branch" class="select">
+          <option value="">Todas</option>
+          <% @branches.each do |branch| %><option value="<%= branch %>"><%= branch %></option><% end %>
+        </select>
+      </label>
+    </div>
+  <% end %>
+</div>
+<%= render "projects/nav", project: @project %>
+
+<div id="insights"
+     data-insights-url="<%= api_v1_project_insights_path(@project.slug, format: :json) %>"
+     data-search-url="<%= api_v1_project_tests_path(@project.slug, format: :json) %>"
+     data-run-url-template="<%= project_run_path(@project, "RUN_ID") %>">
+
+  <section class="card" aria-labelledby="search-title">
+    <h2 id="search-title">Buscar una prueba</h2>
+    <form class="search" role="search" data-search-form>
+      <label for="test-search" class="visually-hidden">Buscar por título o archivo</label>
+      <input id="test-search" class="search__input" type="search" name="q" autocomplete="off"
+             placeholder="Ej. carrito, checkout.spec.ts, cupón…" minlength="2" maxlength="100"
+             aria-describedby="search-help" aria-controls="search-results">
+      <p id="search-help" class="muted small">Escribe al menos 2 letras: los resultados llegan por AJAX mientras escribes.</p>
+    </form>
+    <p class="async-state" hidden data-search-state></p>
+    <ul id="search-results" class="search-results" data-search-results></ul>
+  </section>
+
+  <div class="grid grid--two">
+    <section class="card" aria-labelledby="duration-title">
+      <h2 id="duration-title">Duración de las ejecuciones</h2>
+      <p class="async-state" data-state="loading" data-duration-state>Cargando…</p>
+      <div class="chart-box chart-box--small" hidden data-duration-box>
+        <canvas id="duration-chart" role="img" aria-label="Duración total de cada ejecución, en segundos"></canvas>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="slow-title">
+      <h2 id="slow-title">Pruebas más lentas <span class="muted small">(promedio)</span></h2>
+      <p class="async-state" data-state="loading" data-slow-state>Cargando…</p>
+      <ol class="slow-list" hidden data-slow-list></ol>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="heat-title">
+    <div class="card__head">
+      <h2 id="heat-title">Mapa de calor de fallas</h2>
+      <p class="muted small">Pruebas que fallaron o fueron inestables al menos una vez. Cada columna es una ejecución (la más reciente a la derecha).</p>
+    </div>
+    <p class="async-state" data-state="loading" data-heat-state>Cargando…</p>
+    <div class="table-scroll" hidden data-heat-box>
+      <table class="heatmap">
+        <thead data-heat-head></thead>
+        <tbody data-heat-body></tbody>
+      </table>
+    </div>
+    <ul class="legend legend--spaced">
+      <% %w[passed failed flaky skipped].each do |s| %>
+        <li><span class="legend__swatch strip__cell--<%= s %>" aria-hidden="true"></span><%= status_label(s) %></li>
+      <% end %>
+      <li><span class="legend__swatch heatmap__cell--none" aria-hidden="true"></span>No existía</li>
+    </ul>
+  </section>
+</div>

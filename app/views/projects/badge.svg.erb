@@ -1,0 +1,12 @@
+<% value = @latest_run ? "#{@latest_run.pass_rate}% · #{@latest_run.failed} ✕" : "sin datos" %>
+<% left_w = 58 %><% right_w = 14 + value.length * 7 %>
+<svg xmlns="http://www.w3.org/2000/svg" width="<%= left_w + right_w %>" height="20" role="img" aria-label="QA Pulse: <%= value %>">
+  <title>QA Pulse · <%= @project.name %>: <%= value %></title>
+  <rect width="<%= left_w %>" height="20" rx="3" fill="#374151"/>
+  <rect x="<%= left_w - 4 %>" width="<%= right_w + 4 %>" height="20" rx="3" fill="<%= badge_color(@latest_run) %>"/>
+  <rect x="<%= left_w - 4 %>" width="4" height="20" fill="<%= badge_color(@latest_run) %>"/>
+  <g fill="#fff" font-family="Verdana,DejaVu Sans,sans-serif" font-size="11">
+    <text x="7" y="14">pruebas</text>
+    <text x="<%= left_w + 7 %>" y="14"><%= value %></text>
+  </g>
+</svg>

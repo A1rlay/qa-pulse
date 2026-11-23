@@ -16,6 +16,12 @@ class Run < ApplicationRecord
     )
   end
 
+  # Ejecución anterior del mismo proyecto (por fecha, desempatando por id).
+  def previous
+    project.runs.where("started_at < :t OR (started_at = :t AND id < :id)", t: started_at, id: id)
+           .order(started_at: :desc, id: :desc).first
+  end
+
   # Percentage of executed tests (not skipped) that ended green; flaky ends green.
   def pass_rate
     executed = total - skipped

@@ -1,0 +1,53 @@
+# Corre las pruebas de Playwright en GitHub Actions y sube el reporte a QA Pulse.
+# Uso: copia este archivo a .github/workflows/qa-pulse.yml en el repositorio de pruebas y crea
+# los secretos del repositorio (Settings → Secrets and variables → Actions):
+#   QA_PULSE_URL      p. ej. https://qa-pulse.midominio.com   (debe ser accesible desde internet)
+#   QA_PULSE_PROJECT  el identificador (slug) del proyecto, p. ej. tienda-demo
+#   QA_PULSE_TOKEN    el token de la API del proyecto
+name: Playwright + QA Pulse
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      # El reporter JSON escribe en el archivo indicado por PLAYWRIGHT_JSON_OUTPUT_NAME.
+      # continue-on-error: si hay pruebas fallidas, igual queremos subir el reporte.
+      - name: Ejecutar pruebas
+        id: tests
+        continue-on-error: true
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: playwright-report.json
+        run: npx playwright test --reporter=json,line
+
+      - name: Subir reporte a QA Pulse
+        if: always() && hashFiles('playwright-report.json') != ''
+        env:
+          QA_PULSE_URL: ${{ secrets.QA_PULSE_URL }}
+          QA_PULSE_PROJECT: ${{ secrets.QA_PULSE_PROJECT }}
+          QA_PULSE_TOKEN: ${{ secrets.QA_PULSE_TOKEN }}
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          BRANCH_Q=$(jq -rn --arg v "$BRANCH" '$v|@uri')
+          curl --fail-with-body --silent --show-error \
+            -X POST "$QA_PULSE_URL/api/v1/projects/$QA_PULSE_PROJECT/runs?branch=$BRANCH_Q&commit_sha=$GITHUB_SHA" \
+            -H "Authorization: Bearer $QA_PULSE_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data-binary @playwright-report.json
+
+      # El job falla si las pruebas fallaron, después de haber subido el reporte.
+      - name: Resultado
+        if: steps.tests.outcome == 'failure'
+        run: exit 1

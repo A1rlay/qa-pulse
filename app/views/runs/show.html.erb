@@ -9,6 +9,12 @@
     <% if @run.commit_sha.present? %> · commit <code><%= short_sha(@run.commit_sha) %></code><% end %>
     · <%= format_duration(@run.duration_ms) %> · <strong><%= @run.pass_rate %>%</strong> de éxito
   </p>
+  <p class="actions">
+    <% if @previous %>
+      <%= link_to "Comparar con la anterior (##{@previous.id})", compare_project_path(@project, base: @previous.id, head: @run.id), class: "btn btn--small" %>
+    <% end %>
+    <%= link_to "Descargar CSV", project_run_path(@project, @run, format: :csv), class: "btn btn--small btn--ghost" %>
+  </p>
 </div>
 
 <div id="run-results">

@@ -1,0 +1,111 @@
+<% content_for :title, "Comparar · #{@project.name}" %>
+
+<div class="page-head">
+  <p class="crumbs"><%= link_to "Proyectos", projects_path %> /</p>
+  <h1><%= @project.name %></h1>
+</div>
+<%= render "projects/nav", project: @project %>
+
+<section class="card" aria-labelledby="pick-title">
+  <h2 id="pick-title">¿Qué cambió entre dos ejecuciones?</h2>
+  <% if @choices.size < 2 %>
+    <div class="empty"><p>Se necesitan al menos dos ejecuciones para comparar. Sube otro reporte.</p></div>
+  <% else %>
+    <%= form_with url: compare_project_path(@project), method: :get, class: "compare-form", local: true do %>
+      <% option = ->(run) { ["##{run.id} · #{l(run.started_at, format: :short)} · #{run.branch.presence || 'sin rama'} · #{run.pass_rate}%", run.id] } %>
+      <label class="select-label">Antes
+        <%= select_tag :base, options_for_select(@choices.map(&option), @base&.id), class: "select" %>
+      </label>
+      <span class="compare-form__arrow" aria-hidden="true">→</span>
+      <label class="select-label">Después
+        <%= select_tag :head, options_for_select(@choices.map(&option), @head&.id), class: "select" %>
+      </label>
+      <button type="submit" class="btn">Comparar</button>
+    <% end %>
+  <% end %>
+</section>
+
+<% if @base && @head && @base == @head %>
+  <p class="flash flash--warn">Elegiste la misma ejecución dos veces: selecciona dos distintas.</p>
+<% end %>
+
+<% if @comparison %>
+  <% summary = @comparison.summary %>
+  <div class="cards">
+    <div class="stat">
+      <span class="stat__label">% de éxito</span>
+      <span class="stat__value stat__value--compact"><%= @base.pass_rate %>% → <%= @head.pass_rate %>%</span>
+      <span class="stat__delta <%= summary[:pass_rate_delta].negative? ? "is-bad" : (summary[:pass_rate_delta].positive? ? "is-good" : "") %>"><%= delta_text(summary[:pass_rate_delta], unit: " pts") %></span>
+    </div>
+    <div class="stat stat--failed"><span class="stat__label">Nuevas fallas</span><span class="stat__value"><%= @comparison.new_failures.size %></span></div>
+    <div class="stat stat--passed"><span class="stat__label">Arregladas</span><span class="stat__value"><%= @comparison.fixed.size %></span></div>
+    <div class="stat stat--flaky"><span class="stat__label">Nuevas inestables</span><span class="stat__value"><%= @comparison.new_flaky.size %></span></div>
+    <div class="stat"><span class="stat__label">Más lentas</span><span class="stat__value"><%= @comparison.slower.size %></span></div>
+    <div class="stat">
+      <span class="stat__label">Duración</span>
+      <span class="stat__value"><%= format_duration(@head.duration_ms) %></span>
+      <span class="stat__delta <%= summary[:duration_delta_ms].positive? ? "is-bad" : (summary[:duration_delta_ms].negative? ? "is-good" : "") %>"><%= summary[:duration_delta_ms].zero? ? "sin cambios" : "#{summary[:duration_delta_ms].positive? ? '▲' : '▼'} #{format_duration(summary[:duration_delta_ms].abs)}" %></span>
+    </div>
+  </div>
+
+  <% unless @comparison.changes? %>
+    <div class="empty"><p><strong>Sin cambios relevantes</strong> entre #<%= @base.id %> y #<%= @head.id %>.</p></div>
+  <% end %>
+
+  <% sections = [
+       [:new_failures, "Nuevas fallas", "Pasaban (o no existían) en ##{@base.id} y fallan en ##{@head.id}. Lo primero que hay que revisar.", "failed"],
+       [:fixed, "Arregladas", "Fallaban en ##{@base.id} y ahora pasan.", "passed"],
+       [:new_flaky, "Nuevas inestables", "Pasaron solo después de reintentar en ##{@head.id}.", "flaky"],
+       [:still_failing, "Siguen fallando", "Fallan en las dos ejecuciones.", "failed"],
+       [:added, "Pruebas nuevas", "No existían en ##{@base.id}.", nil],
+       [:removed, "Pruebas eliminadas", "Estaban en ##{@base.id} y ya no aparecen.", nil]
+     ] %>
+  <% sections.each do |key, title, help, tone| %>
+    <% rows = @comparison.public_send(key) %>
+    <% next if rows.empty? %>
+    <section class="card diff diff--<%= tone || "neutral" %>" aria-labelledby="diff-<%= key %>">
+      <h2 id="diff-<%= key %>"><%= title %> <span class="count-pill"><%= rows.size %></span></h2>
+      <p class="muted small"><%= help %></p>
+      <ul class="diff-list">
+        <% rows.each do |row| %>
+          <li>
+            <div class="diff-list__main">
+              <%= link_to row.title, project_test_history_path(@project, row.test_key) %>
+              <span class="muted small"><%= row.file %> · <%= row.project_name.presence || "—" %></span>
+            </div>
+            <div class="diff-list__status">
+              <%= row.before ? status_badge(row.before) : tag.span("no existía", class: "muted small") %>
+              <span aria-hidden="true">→</span>
+              <%= row.after ? status_badge(row.after) : tag.span("eliminada", class: "muted small") %>
+            </div>
+            <% if key == :new_failures && row.error_message.present? %>
+              <details class="error-details"><summary>Ver error</summary><pre class="error"><%= row.error_message %></pre></details>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+  <% end %>
+
+  <% if @comparison.slower.any? %>
+    <section class="card" aria-labelledby="diff-slower">
+      <h2 id="diff-slower">Más lentas <span class="count-pill"><%= @comparison.slower.size %></span></h2>
+      <p class="muted small">Al menos <%= ((RunComparison::SLOWER_RATIO - 1) * 100).round %> % y <%= RunComparison::SLOWER_MIN_MS %> ms más lentas que antes.</p>
+      <div class="table-scroll">
+        <table class="table">
+          <thead><tr><th scope="col">Prueba</th><th scope="col" class="num">Antes</th><th scope="col" class="num">Después</th><th scope="col" class="num">Diferencia</th></tr></thead>
+          <tbody>
+            <% @comparison.slower.each do |row| %>
+              <tr>
+                <td><%= link_to row.title, project_test_history_path(@project, row.test_key) %></td>
+                <td class="num"><%= format_duration(row.before_ms) %></td>
+                <td class="num"><%= format_duration(row.after_ms) %></td>
+                <td class="num text-failed">+<%= format_duration(row.delta_ms) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  <% end %>
+<% end %>

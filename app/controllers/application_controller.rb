@@ -4,8 +4,9 @@ class ApplicationController < ActionController::Base
   # autentica con token Bearer.
   protect_from_forgery with: :exception
 
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+  # Solo navegadores modernos (importmap, CSS :has…) para las páginas HTML. La insignia SVG y el CSV
+  # los piden herramientas que no son navegadores (el proxy de imágenes de GitHub, curl).
+  allow_browser versions: :modern, if: -> { request.format.html? }
 
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes

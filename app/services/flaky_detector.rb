@@ -16,13 +16,14 @@ class FlakyDetector
     end
   end
 
-  def initialize(project, window: DEFAULT_WINDOW)
+  def initialize(project, window: DEFAULT_WINDOW, branch: nil)
     @project = project
     @window = window.to_i.clamp(1, 100)
+    @branch = branch.presence
   end
 
   def call
-    run_ids = @project.recent_runs(@window).pluck(:id)
+    run_ids = @project.recent_runs(@window, branch: @branch).pluck(:id)
     return [] if run_ids.empty?
 
     rows = TestResult.joins(:run).where(run_id: run_ids)
