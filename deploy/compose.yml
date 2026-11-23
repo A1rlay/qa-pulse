@@ -1,0 +1,70 @@
+# QA Pulse en un servidor con Traefik (Coolify, Dokploy o Traefik propio).
+# Lo usa bin/deploy; las variables vienen de /opt/qa-pulse/.env en el servidor.
+name: qa-pulse
+
+services:
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: qa_pulse_production
+      MYSQL_USER: qa_pulse
+      MYSQL_PASSWORD: ${DB_PASSWORD:?falta DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?falta DB_ROOT_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks: [internal]          # sin puertos publicados: solo la app llega a la base de datos
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uqa_pulse -p\"$$MYSQL_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  web:
+    image: ${IMAGE:-qa-pulse:latest}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_USER: qa_pulse
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: qa_pulse_production
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:?falta SECRET_KEY_BASE}
+      APP_HOST: ${APP_HOST:?falta APP_HOST}
+      DISABLE_SSL: ${DISABLE_SSL:-}
+      RAILS_LOG_LEVEL: info
+    networks: [internal, proxy]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/up"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK}
+      # HTTPS con certificado de Let's Encrypt
+      - traefik.http.routers.qa-pulse.rule=Host(`${APP_HOST}`)
+      - traefik.http.routers.qa-pulse.entrypoints=${TRAEFIK_HTTPS_ENTRYPOINT}
+      - traefik.http.routers.qa-pulse.tls=true
+      - traefik.http.routers.qa-pulse.tls.certresolver=${TRAEFIK_CERTRESOLVER}
+      - traefik.http.routers.qa-pulse.service=qa-pulse
+      # HTTP → HTTPS
+      - traefik.http.routers.qa-pulse-http.rule=Host(`${APP_HOST}`)
+      - traefik.http.routers.qa-pulse-http.entrypoints=${TRAEFIK_HTTP_ENTRYPOINT}
+      - traefik.http.routers.qa-pulse-http.middlewares=qa-pulse-https
+      - traefik.http.routers.qa-pulse-http.service=qa-pulse
+      - traefik.http.middlewares.qa-pulse-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.qa-pulse-https.redirectscheme.permanent=true
+      - traefik.http.services.qa-pulse.loadbalancer.server.port=3000
+
+networks:
+  internal: {}
+  proxy:
+    external: true
+    name: ${TRAEFIK_NETWORK}
+
+volumes:
+  mysql-data: {}

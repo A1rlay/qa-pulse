@@ -5,6 +5,6 @@ export default defineConfig({
   testDir: './tests',
   retries: 0,
   workers: 1,
-  use: { baseURL: process.env.QA_PULSE_URL || 'http://127.0.0.1:3000', locale: 'es-MX', timezoneId: 'America/Ciudad_Juarez' },
+  use: { baseURL: process.env.QA_PULSE_URL || 'http://127.0.0.1:3000', ignoreHTTPSErrors: !!process.env.E2E_INSECURE, locale: 'es-MX', timezoneId: 'America/Ciudad_Juarez' },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 });

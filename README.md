@@ -365,7 +365,56 @@ Esta sección señala dónde cumple el proyecto cada requisito de la materia.
 9. Abre una ejecución, filtra por **Falló**, expande el error y descarga el CSV.
 10. Crea un proyecto nuevo: muestra el token, el `curl` y la insignia.
 
-## 10. Estructura
+## 11. Despliegue en un servidor (VPS con Docker y Traefik)
+
+La app se publica como una **imagen Docker** de producción (`Dockerfile`) junto con un **MySQL privado**
+(`deploy/compose.yml`). El servidor ya tiene **Traefik** (lo usan Coolify y Dokploy), que enruta el dominio y
+obtiene el certificado HTTPS de Let's Encrypt.
+
+```bash
+# 0. Una sola vez: acceso por SSH con llave (pide la contraseña del servidor una vez)
+ssh-keygen -t ed25519                # si aún no tienes llave
+ssh-copy-id root@74.208.250.0
+
+# 1. Inspección de solo lectura: Docker, Traefik, red, recursos y el plan
+bin/deploy root@74.208.250.0 --check
+
+# 2. Desplegar: construye la imagen aquí, la envía por SSH y la levanta
+bin/deploy root@74.208.250.0 --apply
+```
+
+Resultado: **https://qa-pulse.74.208.250.0.sslip.io**. sslip.io convierte cualquier subdominio con la IP en un
+DNS válido, así que no hay que configurar nada. Al terminar, el script imprime el token de *Tienda Demo*.
+
+Qué hace `--apply`:
+
+1. Detecta la red, el *cert resolver* y los *entrypoints* de Traefik (Coolify, Dokploy o Traefik propio).
+2. Construye la imagen en tu máquina y la envía con `docker save | ssh docker load`, así que el servidor no necesita
+   acceso al repositorio privado.
+3. En `/opt/qa-pulse` del servidor genera, **solo la primera vez**, `secrets.env` (modo 600) con las contraseñas de
+   MySQL y `SECRET_KEY_BASE`. Esos secretos nunca salen del servidor ni están en git.
+4. `docker compose up -d`. Al arrancar, la app ejecuta `db:prepare`: crea las tablas y carga los datos de demostración
+   la primera vez, y en despliegues posteriores solo aplica las migraciones pendientes.
+5. Espera a que `https://<dominio>/up` responda 200.
+
+Para volver a desplegar después de cambiar código, repite el paso 2. Para reiniciar los datos de la demo en el
+servidor:
+
+```bash
+ssh root@74.208.250.0 'cd /opt/qa-pulse && docker compose exec web ./bin/rails db:seed'
+```
+
+Variables de producción (las pone `bin/deploy`): `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`,
+`SECRET_KEY_BASE`, `APP_HOST` (protección de hosts: Rails rechaza otros dominios con 403).
+
+**Verificado localmente** con un Traefik de prueba y un `ssh` simulado:
+- despliegue completo y health check
+- redirección HTTP → HTTPS (301)
+- subida por la API (201)
+- redespliegue sin perder datos ni secretos
+- los 9 recorridos E2E contra la copia desplegada
+
+## 12. Estructura
 
 ```
 app/controllers/api/v1/   API JSON (runs, flaky)
@@ -377,5 +426,7 @@ lib/middleware/           RawReportBody
 db/                       migraciones, schema, seeds
 spec/                     RSpec + fixture real de Playwright
 e2e/                      pruebas end-to-end con Playwright
+deploy/compose.yml        app + MySQL detrás de Traefik (producción)
+bin/deploy                despliegue por SSH (--check / --apply)
 docs/build/               decisiones de diseño (ADR), esquema, contrato de errores, bitácora
 ```

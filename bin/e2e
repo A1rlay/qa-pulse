@@ -15,7 +15,7 @@ cleanup() {
 }
 trap cleanup EXIT
 docker run --rm --network host -u "$(id -u):$(id -g)" -e HOME=/tmp -e QA_PULSE_TOKEN="$TOKEN" \
-  -e QA_PULSE_URL="${QA_PULSE_URL:-http://127.0.0.1:3000}" \
+  -e QA_PULSE_URL="${QA_PULSE_URL:-http://127.0.0.1:3000}" -e E2E_INSECURE="${E2E_INSECURE:-}" \
   -v "$PWD/e2e":/work -v "$PWD/spec/fixtures":/fixtures:ro -w /work \
   mcr.microsoft.com/playwright:v1.59.0-noble \
   bash -c 'npm install --no-audit --no-fund --silent >/dev/null 2>&1; npx playwright test --reporter=list "$@"' _ "$@"
