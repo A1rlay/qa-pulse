@@ -1,0 +1,57 @@
+<% content_for :title, "Historial de prueba" %>
+
+<div class="page-head">
+  <p class="crumbs"><%= link_to "Proyectos", projects_path %> / <%= link_to @project.name, project_path(@project) %> / Historial</p>
+  <h1 class="title-break"><%= @test.title %></h1>
+  <p class="muted"><code><%= @test.file %></code> · <%= @test.project_name.presence || "sin navegador" %></p>
+</div>
+
+<% counts = @results.map(&:status).tally %>
+<section class="card" aria-labelledby="strip-title">
+  <h2 id="strip-title">Últimos <%= @results.size %> resultados <span class="muted small">(el más reciente a la derecha)</span></h2>
+  <ol class="strip" aria-label="Resultados de la prueba, del más antiguo al más reciente">
+    <% @results.each do |r| %>
+      <li>
+        <%= link_to project_run_path(@project, r.run), class: "strip__cell strip__cell--#{r.status}",
+              title: "##{r.run_id} · #{l(r.run.started_at, format: :short)} · #{status_label(r.status)} · #{format_duration(r.duration_ms)}" do %>
+          <span class="visually-hidden">Ejecución #<%= r.run_id %>, <%= l(r.run.started_at, format: :short) %>: <%= status_label(r.status) %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+  <ul class="legend">
+    <% %w[passed failed flaky skipped].each do |s| %>
+      <li><span class="legend__swatch strip__cell--<%= s %>" aria-hidden="true"></span><%= status_label(s) %>: <%= counts.fetch(s, 0) %></li>
+    <% end %>
+  </ul>
+  <% if @flaky_entry %>
+    <p class="flash flash--warn">Esta prueba es <strong>inestable</strong> según la regla del tablero:
+      <%= @flaky_entry.flaky_runs %> veces flaky y <%= @flaky_entry.flips %> cambios de estado en las últimas <%= FlakyDetector::DEFAULT_WINDOW %> ejecuciones.</p>
+  <% end %>
+</section>
+
+<section class="card" aria-labelledby="dur-title">
+  <h2 id="dur-title">Duraciones</h2>
+  <div class="table-scroll">
+    <table class="table">
+      <thead><tr><th scope="col">Ejecución</th><th scope="col">Fecha</th><th scope="col">Estado</th>
+        <th scope="col" class="num">Duración</th><th scope="col" class="bar-col"><span class="visually-hidden">Barra</span></th></tr></thead>
+      <tbody>
+        <% @results.reverse_each do |r| %>
+          <tr>
+            <td><%= link_to "##{r.run_id}", project_run_path(@project, r.run) %></td>
+            <td><%= l(r.run.started_at, format: :short) %></td>
+            <td><%= status_badge(r.status) %></td>
+            <td class="num"><%= format_duration(r.duration_ms) %></td>
+            <td class="bar-col"><meter class="bar bar--<%= r.status %>" min="0" max="<%= @max_duration %>" value="<%= r.duration_ms %>"><%= r.duration_ms %> ms</meter></td>
+          </tr>
+          <% if r.error_message.present? %>
+            <tr class="subrow"><td colspan="5">
+              <details class="error-details"><summary>Error en #<%= r.run_id %></summary><pre class="error"><%= r.error_message %></pre></details>
+            </td></tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

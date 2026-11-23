@@ -1,0 +1,1463 @@
+{
+  "config": {
+    "configFile": "/work/playwright.config.ts",
+    "rootDir": "/work/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/work/test-results",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/work/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.59.0",
+    "workers": 4,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "auth.spec.ts",
+      "file": "auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Autenticación",
+          "file": "auth.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "inicia sesión con credenciales válidas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 321,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:43.908Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-23ae28fe525b9bbcec2a",
+              "file": "auth.spec.ts",
+              "line": 5,
+              "column": 7
+            },
+            {
+              "title": "rechaza contraseña incorrecta",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 232,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:44.927Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-c5bfbee9eebd63010139",
+              "file": "auth.spec.ts",
+              "line": 9,
+              "column": 7
+            },
+            {
+              "title": "bloquea la cuenta tras 5 intentos",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 236,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:45.214Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-4fcfc3b233b8b01cfba2",
+              "file": "auth.spec.ts",
+              "line": 13,
+              "column": 7
+            },
+            {
+              "title": "cierra sesión por inactividad",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 677,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#estado')\nExpected: \u001b[32m\"Sesión \u001b[7mexpirad\u001b[27ma\"\u001b[39m\nReceived: \u001b[31m\"Sesión \u001b[7mactiv\u001b[27ma\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#estado')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"estado\">Sesión activa</p>\u001b[22m\n\u001b[2m      - unexpected value \"Sesión activa\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#estado')\nExpected: \u001b[32m\"Sesión \u001b[7mexpirad\u001b[27ma\"\u001b[39m\nReceived: \u001b[31m\"Sesión \u001b[7mactiv\u001b[27ma\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#estado')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"estado\">Sesión activa</p>\u001b[22m\n\u001b[2m      - unexpected value \"Sesión activa\"\u001b[22m\n\n    at /work/tests/auth.spec.ts:20:43",
+                        "location": {
+                          "file": "/work/tests/auth.spec.ts",
+                          "column": 43,
+                          "line": 20
+                        },
+                        "snippet": "  18 |     // Inestable a propósito: falla en el primer intento y pasa al reintentar.\n  19 |     await tienda(page, `<p id=\"estado\">${testInfo.retry === 0 ? 'Sesión activa' : 'Sesión expirada'}</p>`);\n> 20 |     await expect(page.locator('#estado')).toHaveText('Sesión expirada', { timeout: 500 });\n     |                                           ^\n  21 |   });\n  22 |   test.describe('Recuperar contraseña', () => {\n  23 |     test('envía el correo de recuperación', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/work/tests/auth.spec.ts",
+                            "column": 43,
+                            "line": 20
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#estado')\nExpected: \u001b[32m\"Sesión \u001b[7mexpirad\u001b[27ma\"\u001b[39m\nReceived: \u001b[31m\"Sesión \u001b[7mactiv\u001b[27ma\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#estado')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"estado\">Sesión activa</p>\u001b[22m\n\u001b[2m      - unexpected value \"Sesión activa\"\u001b[22m\n\n\n  18 |     // Inestable a propósito: falla en el primer intento y pasa al reintentar.\n  19 |     await tienda(page, `<p id=\"estado\">${testInfo.retry === 0 ? 'Sesión activa' : 'Sesión expirada'}</p>`);\n> 20 |     await expect(page.locator('#estado')).toHaveText('Sesión expirada', { timeout: 500 });\n     |                                           ^\n  21 |   });\n  22 |   test.describe('Recuperar contraseña', () => {\n  23 |     test('envía el correo de recuperación', async ({ page }) => {\n    at /work/tests/auth.spec.ts:20:43"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:45.496Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/work/test-results/auth-Autenticación-cierra-sesión-por-inactividad-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/work/tests/auth.spec.ts",
+                        "column": 43,
+                        "line": 20
+                      }
+                    },
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 136,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-23T00:11:47.183Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "flaky"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-4953a6ae8dcdf363e40b",
+              "file": "auth.spec.ts",
+              "line": 17,
+              "column": 7
+            }
+          ],
+          "suites": [
+            {
+              "title": "Recuperar contraseña",
+              "file": "auth.spec.ts",
+              "line": 22,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "envía el correo de recuperación",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 93,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:47.435Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "d748ac400d08b85935ef-58f62e5d63387038fd94",
+                  "file": "auth.spec.ts",
+                  "line": 23,
+                  "column": 9
+                },
+                {
+                  "title": "rechaza un enlace caducado",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 88,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:47.550Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "d748ac400d08b85935ef-34df58c5530986200699",
+                  "file": "auth.spec.ts",
+                  "line": 27,
+                  "column": 9
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "carrito.spec.ts",
+      "file": "carrito.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Carrito",
+          "file": "carrito.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "agrega un producto",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 324,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:43.916Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fa4dc8f8d08e9ced7521-4e19ce813545cd4181e9",
+              "file": "carrito.spec.ts",
+              "line": 5,
+              "column": 7
+            },
+            {
+              "title": "elimina un producto",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 231,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:44.936Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fa4dc8f8d08e9ced7521-6d7829ac6827314798b3",
+              "file": "carrito.spec.ts",
+              "line": 9,
+              "column": 7
+            },
+            {
+              "title": "cambia la cantidad",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 240,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:45.231Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fa4dc8f8d08e9ced7521-7b207df996007713ffb5",
+              "file": "carrito.spec.ts",
+              "line": 13,
+              "column": 7
+            },
+            {
+              "title": "calcula el subtotal",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 147,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:45.517Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fa4dc8f8d08e9ced7521-c26735bd80a6e89c06d2",
+              "file": "carrito.spec.ts",
+              "line": 17,
+              "column": 7
+            },
+            {
+              "title": "actualiza el contador del ícono",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 592,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#badge')\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#badge')\u001b[22m\n\u001b[2m    4 × locator resolved to <span id=\"badge\">0</span>\u001b[22m\n\u001b[2m      - unexpected value \"0\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#badge')\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#badge')\u001b[22m\n\u001b[2m    4 × locator resolved to <span id=\"badge\">0</span>\u001b[22m\n\u001b[2m      - unexpected value \"0\"\u001b[22m\n\n    at /work/tests/carrito.spec.ts:24:42",
+                        "location": {
+                          "file": "/work/tests/carrito.spec.ts",
+                          "column": 42,
+                          "line": 24
+                        },
+                        "snippet": "  22 |     // Inestable a propósito.\n  23 |     await tienda(page, `<span id=\"badge\">${testInfo.retry === 0 ? '0' : '2'}</span>`);\n> 24 |     await expect(page.locator('#badge')).toHaveText('2', { timeout: 500 });\n     |                                          ^\n  25 |   });\n  26 |   test('conserva el carrito al recargar', async ({ page }) => {\n  27 |     await tienda(page, '<ul id=\"carrito\"><li>Gorra</li></ul>');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/work/tests/carrito.spec.ts",
+                            "column": 42,
+                            "line": 24
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#badge')\nExpected: \u001b[32m\"2\"\u001b[39m\nReceived: \u001b[31m\"0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#badge')\u001b[22m\n\u001b[2m    4 × locator resolved to <span id=\"badge\">0</span>\u001b[22m\n\u001b[2m      - unexpected value \"0\"\u001b[22m\n\n\n  22 |     // Inestable a propósito.\n  23 |     await tienda(page, `<span id=\"badge\">${testInfo.retry === 0 ? '0' : '2'}</span>`);\n> 24 |     await expect(page.locator('#badge')).toHaveText('2', { timeout: 500 });\n     |                                          ^\n  25 |   });\n  26 |   test('conserva el carrito al recargar', async ({ page }) => {\n  27 |     await tienda(page, '<ul id=\"carrito\"><li>Gorra</li></ul>');\n    at /work/tests/carrito.spec.ts:24:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:45.698Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/work/test-results/carrito-Carrito-actualiza-el-contador-del-ícono-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/work/tests/carrito.spec.ts",
+                        "column": 42,
+                        "line": 24
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 138,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-23T00:11:47.223Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "flaky"
+                }
+              ],
+              "id": "fa4dc8f8d08e9ced7521-8956e86c54087e0a7cb6",
+              "file": "carrito.spec.ts",
+              "line": 21,
+              "column": 7
+            },
+            {
+              "title": "conserva el carrito al recargar",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 89,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:47.471Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fa4dc8f8d08e9ced7521-95650a0eb2013d523c6f",
+              "file": "carrito.spec.ts",
+              "line": 26,
+              "column": 7
+            },
+            {
+              "title": "limita la cantidad al stock",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 79,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:47.581Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fa4dc8f8d08e9ced7521-5b27d6bc7b1c9b61dce7",
+              "file": "carrito.spec.ts",
+              "line": 30,
+              "column": 7
+            },
+            {
+              "title": "aplica envío gratis desde $999",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 82,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:47.676Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "fa4dc8f8d08e9ced7521-74e6ecdb027201baae58",
+              "file": "carrito.spec.ts",
+              "line": 34,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "catalogo.spec.ts",
+      "file": "catalogo.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Catálogo",
+          "file": "catalogo.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "muestra la lista de productos",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 331,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:43.927Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d62a31f1c5e38edb5008-2c1b04567e22ea563766",
+              "file": "catalogo.spec.ts",
+              "line": 5,
+              "column": 7
+            },
+            {
+              "title": "abre el detalle de un producto",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 241,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:44.946Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d62a31f1c5e38edb5008-604efd6028c72037e0fa",
+              "file": "catalogo.spec.ts",
+              "line": 9,
+              "column": 7
+            },
+            {
+              "title": "pagina los resultados",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 246,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:45.257Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d62a31f1c5e38edb5008-9dde7d959b56ce7f255b",
+              "file": "catalogo.spec.ts",
+              "line": 13,
+              "column": 7
+            }
+          ],
+          "suites": [
+            {
+              "title": "Búsqueda",
+              "file": "catalogo.spec.ts",
+              "line": 17,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "encuentra productos por nombre",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 127,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:45.547Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "d62a31f1c5e38edb5008-5d0a12784944951b5841",
+                  "file": "catalogo.spec.ts",
+                  "line": 18,
+                  "column": 9
+                },
+                {
+                  "title": "muestra mensaje sin resultados",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 77,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:45.703Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "d62a31f1c5e38edb5008-7fae00594c58b4c54fd1",
+                  "file": "catalogo.spec.ts",
+                  "line": 22,
+                  "column": 9
+                },
+                {
+                  "title": "ignora mayúsculas y acentos",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 79,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:45.798Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "d62a31f1c5e38edb5008-ae14c668fde05182fcd3",
+                  "file": "catalogo.spec.ts",
+                  "line": 26,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Filtros",
+              "file": "catalogo.spec.ts",
+              "line": 31,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "filtra por categoría",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 157,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:45.910Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "d62a31f1c5e38edb5008-cd62d8a71b02334d0ea3",
+                  "file": "catalogo.spec.ts",
+                  "line": 32,
+                  "column": 9
+                },
+                {
+                  "title": "filtra por rango de precio",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "failed",
+                          "duration": 625,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('listitem')\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m3\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for getByRole('listitem')\u001b[22m\n\u001b[2m    4 × locator resolved to 3 elements\u001b[22m\n\u001b[2m      - unexpected value \"3\"\u001b[22m\n",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('listitem')\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m3\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for getByRole('listitem')\u001b[22m\n\u001b[2m    4 × locator resolved to 3 elements\u001b[22m\n\u001b[2m      - unexpected value \"3\"\u001b[22m\n\n    at /work/tests/catalogo.spec.ts:40:48",
+                            "location": {
+                              "file": "/work/tests/catalogo.spec.ts",
+                              "column": 48,
+                              "line": 40
+                            },
+                            "snippet": "  38 |       const n = testInfo.retry === 0 ? 3 : 2;\n  39 |       await tienda(page, '<ul>' + '<li>Producto</li>'.repeat(n) + '</ul>');\n> 40 |       await expect(page.getByRole('listitem')).toHaveCount(2, { timeout: 500 });\n     |                                                ^\n  41 |     });\n  42 |   });\n  43 | });"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/work/tests/catalogo.spec.ts",
+                                "column": 48,
+                                "line": 40
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('listitem')\nExpected: \u001b[32m2\u001b[39m\nReceived: \u001b[31m3\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for getByRole('listitem')\u001b[22m\n\u001b[2m    4 × locator resolved to 3 elements\u001b[22m\n\u001b[2m      - unexpected value \"3\"\u001b[22m\n\n\n  38 |       const n = testInfo.retry === 0 ? 3 : 2;\n  39 |       await tienda(page, '<ul>' + '<li>Producto</li>'.repeat(n) + '</ul>');\n> 40 |       await expect(page.getByRole('listitem')).toHaveCount(2, { timeout: 500 });\n     |                                                ^\n  41 |     });\n  42 |   });\n  43 | });\n    at /work/tests/catalogo.spec.ts:40:48"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:46.098Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/work/test-results/catalogo-Catálogo-Filtros-filtra-por-rango-de-precio-chromium/error-context.md"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/work/tests/catalogo.spec.ts",
+                            "column": 48,
+                            "line": 40
+                          }
+                        },
+                        {
+                          "workerIndex": 7,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 133,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 1,
+                          "startTime": "2026-11-23T00:11:47.632Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "flaky"
+                    }
+                  ],
+                  "id": "d62a31f1c5e38edb5008-c452e6e3ec28c0116a79",
+                  "file": "catalogo.spec.ts",
+                  "line": 36,
+                  "column": 9
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "checkout.spec.ts",
+      "file": "checkout.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Checkout",
+          "file": "checkout.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "aplica un cupón de descuento",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 601,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#total')\nExpected: \u001b[32m\"$2\u001b[7m6\u001b[27m8.\u001b[7m2\u001b[27m0\"\u001b[39m\nReceived: \u001b[31m\"$2\u001b[7m9\u001b[27m8.\u001b[7m0\u001b[27m0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#total')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"total\">$298.00</p>\u001b[22m\n\u001b[2m      - unexpected value \"$298.00\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#total')\nExpected: \u001b[32m\"$2\u001b[7m6\u001b[27m8.\u001b[7m2\u001b[27m0\"\u001b[39m\nReceived: \u001b[31m\"$2\u001b[7m9\u001b[27m8.\u001b[7m0\u001b[27m0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#total')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"total\">$298.00</p>\u001b[22m\n\u001b[2m      - unexpected value \"$298.00\"\u001b[22m\n\n    at /work/tests/checkout.spec.ts:32:42",
+                        "location": {
+                          "file": "/work/tests/checkout.spec.ts",
+                          "column": 42,
+                          "line": 32
+                        },
+                        "snippet": "  30 |     // Regresión: el total no refleja el 10% de descuento.\n  31 |     await tienda(page, '<p id=\"total\">$298.00</p>');\n> 32 |     await expect(page.locator('#total')).toHaveText('$268.20', { timeout: 500 });\n     |                                          ^\n  33 |   });\n  34 |   test('muestra la confirmación del pedido', async ({ page }) => {\n  35 |     await tienda(page, '<h2>¡Gracias por tu compra!</h2>');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/work/tests/checkout.spec.ts",
+                            "column": 42,
+                            "line": 32
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#total')\nExpected: \u001b[32m\"$2\u001b[7m6\u001b[27m8.\u001b[7m2\u001b[27m0\"\u001b[39m\nReceived: \u001b[31m\"$2\u001b[7m9\u001b[27m8.\u001b[7m0\u001b[27m0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#total')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"total\">$298.00</p>\u001b[22m\n\u001b[2m      - unexpected value \"$298.00\"\u001b[22m\n\n\n  30 |     // Regresión: el total no refleja el 10% de descuento.\n  31 |     await tienda(page, '<p id=\"total\">$298.00</p>');\n> 32 |     await expect(page.locator('#total')).toHaveText('$268.20', { timeout: 500 });\n     |                                          ^\n  33 |   });\n  34 |   test('muestra la confirmación del pedido', async ({ page }) => {\n  35 |     await tienda(page, '<h2>¡Gracias por tu compra!</h2>');\n    at /work/tests/checkout.spec.ts:32:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:45.740Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/work/test-results/checkout-Checkout-aplica-un-cupón-de-descuento-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/work/tests/checkout.spec.ts",
+                        "column": 42,
+                        "line": 32
+                      }
+                    },
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 638,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#total')\nExpected: \u001b[32m\"$2\u001b[7m6\u001b[27m8.\u001b[7m2\u001b[27m0\"\u001b[39m\nReceived: \u001b[31m\"$2\u001b[7m9\u001b[27m8.\u001b[7m0\u001b[27m0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#total')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"total\">$298.00</p>\u001b[22m\n\u001b[2m      - unexpected value \"$298.00\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#total')\nExpected: \u001b[32m\"$2\u001b[7m6\u001b[27m8.\u001b[7m2\u001b[27m0\"\u001b[39m\nReceived: \u001b[31m\"$2\u001b[7m9\u001b[27m8.\u001b[7m0\u001b[27m0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#total')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"total\">$298.00</p>\u001b[22m\n\u001b[2m      - unexpected value \"$298.00\"\u001b[22m\n\n    at /work/tests/checkout.spec.ts:32:42",
+                        "location": {
+                          "file": "/work/tests/checkout.spec.ts",
+                          "column": 42,
+                          "line": 32
+                        },
+                        "snippet": "  30 |     // Regresión: el total no refleja el 10% de descuento.\n  31 |     await tienda(page, '<p id=\"total\">$298.00</p>');\n> 32 |     await expect(page.locator('#total')).toHaveText('$268.20', { timeout: 500 });\n     |                                          ^\n  33 |   });\n  34 |   test('muestra la confirmación del pedido', async ({ page }) => {\n  35 |     await tienda(page, '<h2>¡Gracias por tu compra!</h2>');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/work/tests/checkout.spec.ts",
+                            "column": 42,
+                            "line": 32
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#total')\nExpected: \u001b[32m\"$2\u001b[7m6\u001b[27m8.\u001b[7m2\u001b[27m0\"\u001b[39m\nReceived: \u001b[31m\"$2\u001b[7m9\u001b[27m8.\u001b[7m0\u001b[27m0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#total')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"total\">$298.00</p>\u001b[22m\n\u001b[2m      - unexpected value \"$298.00\"\u001b[22m\n\n\n  30 |     // Regresión: el total no refleja el 10% de descuento.\n  31 |     await tienda(page, '<p id=\"total\">$298.00</p>');\n> 32 |     await expect(page.locator('#total')).toHaveText('$268.20', { timeout: 500 });\n     |                                          ^\n  33 |   });\n  34 |   test('muestra la confirmación del pedido', async ({ page }) => {\n  35 |     await tienda(page, '<h2>¡Gracias por tu compra!</h2>');\n    at /work/tests/checkout.spec.ts:32:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-11-23T00:11:47.264Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/work/test-results/checkout-Checkout-aplica-un-cupón-de-descuento-chromium-retry1/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/work/tests/checkout.spec.ts",
+                        "column": 42,
+                        "line": 32
+                      }
+                    },
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 632,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#total')\nExpected: \u001b[32m\"$2\u001b[7m6\u001b[27m8.\u001b[7m2\u001b[27m0\"\u001b[39m\nReceived: \u001b[31m\"$2\u001b[7m9\u001b[27m8.\u001b[7m0\u001b[27m0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#total')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"total\">$298.00</p>\u001b[22m\n\u001b[2m      - unexpected value \"$298.00\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#total')\nExpected: \u001b[32m\"$2\u001b[7m6\u001b[27m8.\u001b[7m2\u001b[27m0\"\u001b[39m\nReceived: \u001b[31m\"$2\u001b[7m9\u001b[27m8.\u001b[7m0\u001b[27m0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#total')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"total\">$298.00</p>\u001b[22m\n\u001b[2m      - unexpected value \"$298.00\"\u001b[22m\n\n    at /work/tests/checkout.spec.ts:32:42",
+                        "location": {
+                          "file": "/work/tests/checkout.spec.ts",
+                          "column": 42,
+                          "line": 32
+                        },
+                        "snippet": "  30 |     // Regresión: el total no refleja el 10% de descuento.\n  31 |     await tienda(page, '<p id=\"total\">$298.00</p>');\n> 32 |     await expect(page.locator('#total')).toHaveText('$268.20', { timeout: 500 });\n     |                                          ^\n  33 |   });\n  34 |   test('muestra la confirmación del pedido', async ({ page }) => {\n  35 |     await tienda(page, '<h2>¡Gracias por tu compra!</h2>');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/work/tests/checkout.spec.ts",
+                            "column": 42,
+                            "line": 32
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('#total')\nExpected: \u001b[32m\"$2\u001b[7m6\u001b[27m8.\u001b[7m2\u001b[27m0\"\u001b[39m\nReceived: \u001b[31m\"$2\u001b[7m9\u001b[27m8.\u001b[7m0\u001b[27m0\"\u001b[39m\nTimeout:  500ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 500ms\u001b[22m\n\u001b[2m  - waiting for locator('#total')\u001b[22m\n\u001b[2m    4 × locator resolved to <p id=\"total\">$298.00</p>\u001b[22m\n\u001b[2m      - unexpected value \"$298.00\"\u001b[22m\n\n\n  30 |     // Regresión: el total no refleja el 10% de descuento.\n  31 |     await tienda(page, '<p id=\"total\">$298.00</p>');\n> 32 |     await expect(page.locator('#total')).toHaveText('$268.20', { timeout: 500 });\n     |                                          ^\n  33 |   });\n  34 |   test('muestra la confirmación del pedido', async ({ page }) => {\n  35 |     await tienda(page, '<h2>¡Gracias por tu compra!</h2>');\n    at /work/tests/checkout.spec.ts:32:42"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 2,
+                      "startTime": "2026-11-23T00:11:48.843Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/work/test-results/checkout-Checkout-aplica-un-cupón-de-descuento-chromium-retry2/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/work/tests/checkout.spec.ts",
+                        "column": 42,
+                        "line": 32
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "25ab1bfc84c57e3e3a45-a478de23a0b2fa673de7",
+              "file": "checkout.spec.ts",
+              "line": 29,
+              "column": 7
+            },
+            {
+              "title": "muestra la confirmación del pedido",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 122,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:50.482Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "25ab1bfc84c57e3e3a45-f21105362a5c847112e7",
+              "file": "checkout.spec.ts",
+              "line": 34,
+              "column": 7
+            },
+            {
+              "title": "envía el correo de confirmación",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 75,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-23T00:11:50.697Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "25ab1bfc84c57e3e3a45-9f9acaf3215a6a2e69a0",
+              "file": "checkout.spec.ts",
+              "line": 38,
+              "column": 7
+            }
+          ],
+          "suites": [
+            {
+              "title": "Dirección",
+              "file": "checkout.spec.ts",
+              "line": 5,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "valida el código postal",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 323,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:43.905Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "25ab1bfc84c57e3e3a45-ddf6c6772cd18015317d",
+                  "file": "checkout.spec.ts",
+                  "line": 6,
+                  "column": 9
+                },
+                {
+                  "title": "guarda una dirección nueva",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 220,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:44.929Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "25ab1bfc84c57e3e3a45-fff177369aa50b759cd6",
+                  "file": "checkout.spec.ts",
+                  "line": 10,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Pago",
+              "file": "checkout.spec.ts",
+              "line": 15,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "paga con tarjeta",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 239,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:45.207Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "25ab1bfc84c57e3e3a45-bac693c9b54665e5a7e1",
+                  "file": "checkout.spec.ts",
+                  "line": 16,
+                  "column": 9
+                },
+                {
+                  "title": "rechaza una tarjeta vencida",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 160,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:45.489Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "25ab1bfc84c57e3e3a45-261b45199e2139006f67",
+                  "file": "checkout.spec.ts",
+                  "line": 20,
+                  "column": 9
+                },
+                {
+                  "title": "paga con PayPal",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Sandbox de PayPal no disponible",
+                          "location": {
+                            "file": "/work/tests/checkout.spec.ts",
+                            "line": 25,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "expectedStatus": "skipped",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "skipped",
+                          "duration": 42,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-11-23T00:11:45.677Z",
+                          "annotations": [
+                            {
+                              "type": "skip",
+                              "description": "Sandbox de PayPal no disponible",
+                              "location": {
+                                "file": "/work/tests/checkout.spec.ts",
+                                "line": 25,
+                                "column": 12
+                              }
+                            }
+                          ],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "skipped"
+                    }
+                  ],
+                  "id": "25ab1bfc84c57e3e3a45-a5bde4e31d904a84ed64",
+                  "file": "checkout.spec.ts",
+                  "line": 24,
+                  "column": 9
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-23T00:11:43.024Z",
+    "duration": 7807.827,
+    "expected": 25,
+    "skipped": 1,
+    "unexpected": 1,
+    "flaky": 3
+  }
+}

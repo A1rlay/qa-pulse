@@ -1,0 +1,1 @@
+{ "name": "tienda-demo-e2e", "private": true, "devDependencies": { "@playwright/test": "1.59.0" } }

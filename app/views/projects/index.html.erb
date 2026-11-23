@@ -1,0 +1,68 @@
+<% content_for :title, "Proyectos" %>
+
+<div class="page-head">
+  <h1>Proyectos</h1>
+  <p class="muted">Cada proyecto recibe reportes JSON de Playwright y guarda el historial de todas sus ejecuciones.</p>
+</div>
+
+<% if @created %>
+  <section class="card card--highlight" aria-labelledby="created-title">
+    <h2 id="created-title">Listo: «<%= @created.name %>» ya puede recibir reportes</h2>
+    <%= render "shared/upload_instructions", project: @created %>
+    <p><%= link_to "Ir al tablero de #{@created.name} →", project_path(@created) %></p>
+  </section>
+<% end %>
+
+<div class="grid grid--sidebar">
+  <section aria-labelledby="list-title">
+    <h2 id="list-title" class="visually-hidden">Lista de proyectos</h2>
+    <% if @projects.empty? %>
+      <div class="empty">
+        <p><strong>Aún no hay proyectos.</strong></p>
+        <p>Crea uno con el formulario: recibirás un token y el comando <code>curl</code> para subir tu primer reporte.</p>
+      </div>
+    <% else %>
+      <ul class="project-list">
+        <% @projects.each do |project| %>
+          <% run = @latest_runs[project.id] %>
+          <li class="card project-card">
+            <div class="project-card__head">
+              <h3><%= link_to project.name, project_path(project) %></h3>
+              <code class="muted"><%= project.slug %></code>
+            </div>
+            <% if run %>
+              <p class="project-card__stats">
+                Última ejecución: <%= l(run.started_at, format: :short) %> ·
+                <strong><%= run.pass_rate %>%</strong> aprobadas ·
+                <span class="text-failed"><%= run.failed %> fallidas</span> ·
+                <span class="text-flaky"><%= run.flaky %> inestables</span>
+              </p>
+            <% else %>
+              <p class="project-card__stats muted">Sin ejecuciones todavía.</p>
+            <% end %>
+            <details>
+              <summary>Token y comando de subida</summary>
+              <%= render "shared/upload_instructions", project: project %>
+            </details>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+
+  <aside class="card" aria-labelledby="new-title">
+    <h2 id="new-title">Nuevo proyecto</h2>
+    <%= form_with model: @new_project, url: projects_path, class: "form" do |f| %>
+      <% if @new_project.errors.any? %>
+        <div class="flash flash--error" role="alert">
+          <ul><% @new_project.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %></ul>
+        </div>
+      <% end %>
+      <%= f.label :name, "Nombre" %>
+      <%= f.text_field :name, required: true, maxlength: 100, placeholder: "Ej. Tienda en línea",
+                              aria: { describedby: "name-help" } %>
+      <p id="name-help" class="muted small">Se genera un identificador para la URL y un token secreto para la API.</p>
+      <%= f.submit "Crear proyecto", class: "btn" %>
+    <% end %>
+  </aside>
+</div>

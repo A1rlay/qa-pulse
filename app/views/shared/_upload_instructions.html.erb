@@ -1,0 +1,15 @@
+<%# Token y comando listo para copiar. Todo se imprime escapado (ERB por defecto). %>
+<div class="upload">
+  <p class="upload__step"><strong>1.</strong> Genera el reporte JSON en tu proyecto de Playwright:</p>
+  <div class="copyable">
+    <pre><code id="gen-<%= project.slug %>">npx playwright test --reporter=json &gt; playwright-report.json</code></pre>
+    <button type="button" class="btn btn--small" data-copy-target="gen-<%= project.slug %>">Copiar</button>
+  </div>
+  <p class="upload__step"><strong>2.</strong> Súbelo a QA Pulse:</p>
+  <div class="copyable">
+    <pre><code id="curl-<%= project.slug %>"><%= upload_curl(project) %></code></pre>
+    <button type="button" class="btn btn--small" data-copy-target="curl-<%= project.slug %>">Copiar</button>
+  </div>
+  <p class="upload__token">Token de la API: <code id="token-<%= project.slug %>"><%= project.api_token %></code>
+    <button type="button" class="btn btn--small btn--ghost" data-copy-target="token-<%= project.slug %>">Copiar token</button></p>
+</div>

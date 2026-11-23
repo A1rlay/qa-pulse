@@ -1,0 +1,55 @@
+<% content_for :title, "Ejecución ##{@run.id}" %>
+
+<div class="page-head">
+  <p class="crumbs"><%= link_to "Proyectos", projects_path %> / <%= link_to @project.name, project_path(@project) %> /</p>
+  <h1>Ejecución #<%= @run.id %></h1>
+  <p class="muted">
+    <%= l(@run.started_at, format: :long) %> ·
+    rama <strong><%= @run.branch.presence || "sin rama" %></strong>
+    <% if @run.commit_sha.present? %> · commit <code><%= short_sha(@run.commit_sha) %></code><% end %>
+    · <%= format_duration(@run.duration_ms) %> · <strong><%= @run.pass_rate %>%</strong> de éxito
+  </p>
+</div>
+
+<div id="run-results">
+  <div class="filters" role="group" aria-label="Filtrar por estado">
+    <button type="button" class="chip" data-filter="all" aria-pressed="true">Todas <span class="chip__count"><%= @run.total %></span></button>
+    <% %w[failed flaky passed skipped].each do |status| %>
+      <% count = @run.public_send(status) %>
+      <button type="button" class="chip chip--<%= status %>" data-filter="<%= status %>" aria-pressed="false" <%= "disabled" if count.zero? %>>
+        <%= status_label(status) %> <span class="chip__count"><%= count %></span>
+      </button>
+    <% end %>
+  </div>
+  <p class="muted small" data-filter-status role="status" aria-live="polite">Mostrando <%= @results.size %> de <%= @results.size %> pruebas.</p>
+
+  <div class="table-scroll card card--flush">
+    <table class="table table--results">
+      <thead><tr>
+        <th scope="col">Estado</th><th scope="col">Prueba</th><th scope="col">Archivo</th>
+        <th scope="col">Navegador</th><th scope="col" class="num">Reintentos</th><th scope="col" class="num">Duración</th>
+      </tr></thead>
+      <tbody>
+        <% @results.each do |result| %>
+          <tr data-status="<%= result.status %>">
+            <td><%= status_badge(result.status) %></td>
+            <td>
+              <%= link_to result.title, project_test_history_path(@project, result.test_key), title: "Ver historial de esta prueba" %>
+              <% if result.error_message.present? %>
+                <details class="error-details">
+                  <summary><%= result.status == "flaky" ? "Ver error del intento fallido" : "Ver error" %></summary>
+                  <pre class="error"><%= result.error_message %></pre>
+                </details>
+              <% end %>
+            </td>
+            <td><code><%= result.file %></code></td>
+            <td><%= result.project_name.presence || "—" %></td>
+            <td class="num"><%= result.retries %></td>
+            <td class="num"><%= format_duration(result.duration_ms) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <p class="empty" hidden data-filter-empty>No hay pruebas con ese estado en esta ejecución.</p>
+  </div>
+</div>

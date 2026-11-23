@@ -1,0 +1,102 @@
+<% content_for :title, @project.name %>
+
+<div class="page-head page-head--row">
+  <div>
+    <p class="crumbs"><%= link_to "Proyectos", projects_path %> /</p>
+    <h1><%= @project.name %></h1>
+  </div>
+  <p class="live" id="live-status" role="status" aria-live="polite">
+    <span class="live__dot" aria-hidden="true"></span>
+    <span data-live-text>Conectando…</span>
+  </p>
+</div>
+
+<div id="dashboard"
+     data-runs-url="<%= api_v1_project_runs_path(@project.slug, format: :json, limit: 20) %>"
+     data-flaky-url="<%= api_v1_project_flaky_path(@project.slug, format: :json) %>"
+     data-run-url-template="<%= project_run_path(@project, "RUN_ID") %>"
+     data-refresh-ms="10000">
+
+  <section aria-labelledby="summary-title">
+    <h2 id="summary-title" class="section-title">
+      Última ejecución
+      <span class="muted small" data-latest-meta>
+        <% if @latest_run %>
+          <%= link_to "##{@latest_run.id}", project_run_path(@project, @latest_run) %> ·
+          <%= l(@latest_run.started_at, format: :short) %> · <%= @latest_run.branch.presence || "sin rama" %>
+        <% end %>
+      </span>
+    </h2>
+    <div class="cards">
+      <% [["total", "Total", nil], ["passed", "Pasaron", "passed"], ["failed", "Fallaron", "failed"],
+          ["flaky", "Inestables", "flaky"], ["pass_rate", "Tasa de éxito", nil], ["duration_ms", "Duración", nil]].each do |key, label, tone| %>
+        <div class="stat <%= "stat--#{tone}" if tone %>">
+          <span class="stat__label"><%= label %></span>
+          <span class="stat__value" data-stat="<%= key %>">
+            <% if @latest_run %>
+              <%= case key
+                  when "pass_rate" then "#{@latest_run.pass_rate}%"
+                  when "duration_ms" then format_duration(@latest_run.duration_ms)
+                  else @latest_run.public_send(key)
+                  end %>
+            <% else %>—<% end %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="trend-title">
+    <div class="card__head">
+      <h2 id="trend-title">Tendencia de las últimas 20 ejecuciones</h2>
+      <p class="muted small">Barras: pruebas fallidas e inestables. Línea: % de éxito. Se actualiza cada 10 s por AJAX.</p>
+    </div>
+    <p class="async-state" data-state="loading" data-chart-state>Cargando ejecuciones…</p>
+    <div class="chart-box" hidden data-chart-box>
+      <canvas id="trend-chart" role="img"
+              aria-label="Gráfica de tasa de éxito y fallas por ejecución. Los datos también están en la tabla de abajo."></canvas>
+    </div>
+    <details class="table-fallback">
+      <summary>Ver los datos de la gráfica en una tabla</summary>
+      <div class="table-scroll">
+        <table class="table">
+          <thead><tr><th scope="col">Ejecución</th><th scope="col">Fecha</th><th scope="col">Rama</th>
+            <th scope="col">Éxito</th><th scope="col">Fallidas</th><th scope="col">Inestables</th><th scope="col">Duración</th></tr></thead>
+          <tbody data-runs-body></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <section class="card" aria-labelledby="flaky-title">
+    <div class="card__head">
+      <h2 id="flaky-title">Pruebas inestables (flaky)</h2>
+    </div>
+    <div class="rule" id="flaky-rule">
+      <p><strong>¿Cómo se decide?</strong> Se revisan las últimas <strong><%= FlakyDetector::DEFAULT_WINDOW %> ejecuciones</strong>.
+        Una prueba es <em>inestable</em> si cumple al menos una condición:</p>
+      <ol>
+        <li>Playwright la marcó como <strong>flaky</strong> en alguna ejecución: falló y luego pasó al reintentar, sin cambios en el código.</li>
+        <li>Su resultado <strong>cambió entre “pasó” y “falló” al menos <%= FlakyDetector::MIN_FLIPS %> veces</strong>
+          (por ejemplo pasó → falló → pasó). Las omitidas no cuentan.</li>
+      </ol>
+      <p class="muted small">Una prueba que empezó a fallar y sigue fallando cambió una sola vez: eso es una <strong>regresión</strong>, no inestabilidad.</p>
+    </div>
+    <p class="async-state" data-state="loading" data-flaky-state>Cargando pruebas inestables…</p>
+    <div class="table-scroll" hidden data-flaky-box>
+      <table class="table">
+        <thead><tr>
+          <th scope="col">Prueba</th><th scope="col">Navegador</th>
+          <th scope="col" class="num">Veces flaky</th><th scope="col" class="num">Cambios de estado</th>
+          <th scope="col">Último error</th>
+        </tr></thead>
+        <tbody data-flaky-body></tbody>
+      </table>
+    </div>
+  </section>
+
+  <details class="card">
+    <summary><strong>Cómo subir un reporte a este proyecto</strong></summary>
+    <%= render "shared/upload_instructions", project: @project %>
+  </details>
+</div>

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Sube spec/fixtures/playwright_report.json a QA Pulse, como lo haría un pipeline de CI.
+# Uso:  bin/demo_upload [slug] [rama]        (por defecto: tienda-demo main)
+# Variables opcionales: QA_PULSE_URL (http://127.0.0.1:3000), QA_PULSE_TOKEN (si no, se lee de la BD).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+SLUG="${1:-tienda-demo}"
+BRANCH="${2:-main}"
+URL="${QA_PULSE_URL:-http://127.0.0.1:3000}"
+REPORT="spec/fixtures/playwright_report.json"
+
+if [[ -z "${QA_PULSE_TOKEN:-}" ]]; then
+  QA_PULSE_TOKEN="$(bin/rails runner "print Project.find_by!(slug: ARGV[0]).api_token" "$SLUG")"
+fi
+
+# El reporte de ejemplo se generó una sola vez: se actualiza stats.startTime a "ahora"
+# para que la subida en vivo aparezca como la ejecución más reciente en la gráfica.
+TMP="$(mktemp)"
+trap 'rm -f "$TMP"' EXIT
+ruby -rjson -rtime -e '
+  r = JSON.parse(File.read(ARGV[0]))
+  r["stats"]["startTime"] = Time.now.utc.iso8601(3)
+  File.write(ARGV[1], JSON.generate(r))
+' "$REPORT" "$TMP"
+
+COMMIT="$(git rev-parse --short HEAD 2>/dev/null || true)"
+QUERY="$(ruby -rerb -e 'q = "branch=#{ERB::Util.url_encode(ARGV[0])}"; q += "&commit_sha=#{ARGV[1]}" unless ARGV[1].to_s.empty?; print q' "$BRANCH" "$COMMIT")"
+
+echo "→ POST ${URL}/api/v1/projects/${SLUG}/runs?${QUERY}"
+curl --silent --show-error --fail-with-body \
+  -X POST "${URL}/api/v1/projects/${SLUG}/runs?${QUERY}" \
+  -H "Authorization: Bearer ${QA_PULSE_TOKEN}" \
+  -H "Content-Type: application/json" \
+  --data-binary "@${TMP}"
+echo

@@ -1,0 +1,23 @@
+# MySQL (XAMPP por defecto: usuario root, sin contraseña, 127.0.0.1:3306).
+# Sobrescribe con variables de entorno: DB_USER, DB_PASSWORD, DB_HOST, DB_PORT.
+default: &default
+  adapter: mysql2
+  encoding: utf8mb4
+  collation: utf8mb4_unicode_ci
+  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV.fetch("DB_USER") { "root" } %>
+  password: <%= ENV.fetch("DB_PASSWORD") { "" } %>
+  host: <%= ENV.fetch("DB_HOST") { "127.0.0.1" } %>
+  port: <%= ENV.fetch("DB_PORT") { 3306 } %>
+
+development:
+  <<: *default
+  database: qa_pulse_development
+
+test:
+  <<: *default
+  database: qa_pulse_test
+
+production:
+  <<: *default
+  database: <%= ENV.fetch("DB_NAME") { "qa_pulse_production" } %>
