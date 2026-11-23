@@ -22,19 +22,10 @@ Rails.application.configure do
   # config.asset_host = "http://assets.example.com"
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  config.assume_ssl = ENV["DISABLE_SSL"].blank?
+  config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # HTTPS obligatorio detrás del proxy del servidor. /up queda fuera para el health check.
-  # DISABLE_SSL=1 solo para probar la imagen localmente por HTTP.
-  config.force_ssl = ENV["DISABLE_SSL"].blank?
-  config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
-
-  # Protección contra DNS rebinding: solo se aceptan peticiones al dominio público (APP_HOST).
-  if ENV["APP_HOST"].present?
-    config.hosts = ENV["APP_HOST"].split(",").map(&:strip)
-    config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
-  end
+  config.force_ssl = true
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
