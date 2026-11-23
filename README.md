@@ -365,7 +365,7 @@ Esta sección señala dónde cumple el proyecto cada requisito de la materia.
 9. Abre una ejecución, filtra por **Falló**, expande el error y descarga el CSV.
 10. Crea un proyecto nuevo: muestra el token, el `curl` y la insignia.
 
-## 11. Despliegue en un servidor (VPS con Docker y Traefik)
+## 10. Despliegue en un servidor (VPS con Docker y Traefik)
 
 La app se publica como una **imagen Docker** de producción (`Dockerfile`) junto con un **MySQL privado**
 (`deploy/compose.yml`). El servidor ya tiene **Traefik** (lo usan Coolify y Dokploy), que enruta el dominio y
@@ -414,7 +414,7 @@ Variables de producción (las pone `bin/deploy`): `DB_HOST`, `DB_USER`, `DB_PASS
 - redespliegue sin perder datos ni secretos
 - los 9 recorridos E2E contra la copia desplegada
 
-## 12. Estructura
+## 11. Estructura
 
 ```
 app/controllers/api/v1/   API JSON (runs, flaky)
